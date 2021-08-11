@@ -20,11 +20,11 @@ function ImagePopup(props) {
 }
 
 ImagePopup.propTypes = {
-  onClose: PropTypes.func.isRequired,
   card: PropTypes.shape({
     name: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
-  })
+  }),
+  onClose: PropTypes.func.isRequired
 };
 
 export default ImagePopup;
