@@ -62,18 +62,16 @@ class Api {
     }));
   }
 
-  addLike(cardId) {
-    return this._promiseHandler(fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
-      method: 'PUT',
-      headers: this._headers
-    }));
-  }
-
-  deleteLike(cardId) {
-    return this._promiseHandler(fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
-      method: 'DELETE',
-      headers: this._headers
-    }));
+  changeCardLikeStatus(cardId, isLiked) {
+    return isLiked
+      ? this._promiseHandler(fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+        method: 'DELETE',
+        headers: this._headers
+      }))
+      : this._promiseHandler(fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+          method: 'PUT',
+          headers: this._headers
+        }));
   }
 }
 

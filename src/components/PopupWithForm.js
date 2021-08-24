@@ -4,6 +4,7 @@ function PopupWithForm(props) {
   const {
     isOpen,
     onClose,
+    onSubmit,
     name,
     title,
     btnSubmitCaption,
@@ -13,7 +14,7 @@ function PopupWithForm(props) {
   return (
     <section className={`popup popup-${name} ${isOpen ? 'popup_opened' : ''}`}>
       <div className='popup__container'>
-        <form className={`form form-${name}`} name={`form-${name}`}>
+        <form className={`form form-${name}`} name={`form-${name}`} onSubmit={onSubmit}>
           <h2 className='form__heading'>{title}</h2>
           {children}
           <button className='form__button-submit' type='submit'>{btnSubmitCaption}</button>
@@ -27,6 +28,7 @@ function PopupWithForm(props) {
 PopupWithForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   btnSubmitCaption: PropTypes.string.isRequired,

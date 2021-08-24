@@ -1,12 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import FormField from './FormField';
-import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
+import AddCardPopup from './AddCardPopup';
+import api from '../utils/api';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App() {
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
 
   const [isPopupProfileOpen, setIsPopupProfileOpen] = useState(false);
   const [isPopupCardOpen, setIsPopupCardOpen] = useState(false);
@@ -24,54 +29,99 @@ function App() {
     setSelectedCard(null);
   }
 
+  useEffect(() => {
+    const promises = [api.getUserInfo(), api.getInitialCards()];
+
+    Promise.all(promises)
+      .then(([userInfo, initialCards]) => {
+        setCurrentUser(userInfo);
+        setCards(initialCards);
+      })
+      .catch(err => console.log(err));
+  }, []);
+
+  const handleCardLike = (card) => {
+    const isLiked = card.likes.some(like => like._id === currentUser._id);
+
+    api.changeCardLikeStatus(card._id, isLiked)
+      .then(newCard => {
+        setCards(cards => cards.map(currCard => currCard._id === card._id ? newCard : currCard));
+      })
+      .catch(err => console.log(err));
+  }
+
+  const handleCardDelete = (card) => {
+    api.deleteCard(card._id)
+      .then(() => {
+        setCards(cards.filter(currCard => currCard._id !== card._id))
+      })
+      .catch(err => console.log(err));
+  }
+
+  const handleUpdateUser = ({name, about}) => {
+    api.setUserInfo(name, about)
+    .then(userInfo => {
+      setCurrentUser(userInfo);
+      closeAllPopups();
+    })
+    .catch(err => console.log(err));
+  }
+
+  const handleUpdateAvatar = (avatar) => {
+    api.setUserAvatar(avatar)
+      .then(userInfo => {
+        setCurrentUser(userInfo);
+        closeAllPopups();
+      })
+      .catch(err => console.log(err))
+  }
+
+  const handleAddCard = ({name, link}) => {
+    api.addCard(name, link)
+    .then(newCard => {
+      setCards([newCard, ...cards]);
+      closeAllPopups();
+    })
+    .catch(err => console.log(err))
+  }
+
   return (
-    <>
+    <CurrentUserContext.Provider value={currentUser}>
       <Header />
       <Main
+        cards={cards}
         onEditProfile={handleButtonEditProfileClick}
         onAddCard={handleButtonAddCardClick}
         onEditAvatar={handleButtonEditAvatarClick}
         onCardClick={setSelectedCard}
+        onCardLike={handleCardLike}
+        onCardDelete={handleCardDelete}
       />
       <Footer />
 
-      <PopupWithForm
+      <EditProfilePopup
         isOpen={isPopupProfileOpen}
         onClose={closeAllPopups}
-        name='profile'
-        title='Редактировать профиль'
-        btnSubmitCaption='Сохранить'
-      >
-        <FormField type='text' name='profile-name' placeholder='Имя' minLength={2} maxLength={40} />
-        <FormField type='text' name='profile-job' placeholder='О себе' minLength={2} maxLength={200} />
-      </PopupWithForm>
+        onUpdateUser={handleUpdateUser}
+      />
 
-      <PopupWithForm
+      <AddCardPopup
         isOpen={isPopupCardOpen}
         onClose={closeAllPopups}
-        name='card'
-        title='Новое место'
-        btnSubmitCaption='Создать'
-      >
-        <FormField type='text' name='card-name' placeholder='Название' minLength={2} maxLength={30} />
-        <FormField type='url' name='card-link' placeholder='Ссылка на картинку' />
-      </PopupWithForm>
+        onAddCard={handleAddCard}
+      />
 
-      <PopupWithForm
+      <EditAvatarPopup
         isOpen={isPopupAvatarOpen}
         onClose={closeAllPopups}
-        name='avatar'
-        title='Обновить аватар'
-        btnSubmitCaption='Сохранить'
-      >
-        <FormField type='url' name='avatar-link' placeholder='Ссылка на аватар' />
-      </PopupWithForm>
+        onUpdateAvatar={handleUpdateAvatar}
+      />
 
       <ImagePopup
         card={selectedCard}
         onClose={closeAllPopups}
       />
-    </>
+    </CurrentUserContext.Provider>
   );
 }
 
