@@ -19,7 +19,8 @@ function EditAvatarPopup(props) {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    onUpdateAvatar(avatarRef.current.value);
+    onUpdateAvatar(avatarRef.current.value)
+      .then(() => avatarRef.current.value = '');
   }
 
   return (

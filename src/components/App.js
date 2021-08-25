@@ -68,7 +68,7 @@ function App() {
   }
 
   const handleUpdateAvatar = (avatar) => {
-    api.setUserAvatar(avatar)
+    return api.setUserAvatar(avatar)
       .then(userInfo => {
         setCurrentUser(userInfo);
         closeAllPopups();
@@ -77,12 +77,12 @@ function App() {
   }
 
   const handleAddCard = ({name, link}) => {
-    api.addCard(name, link)
-    .then(newCard => {
-      setCards([newCard, ...cards]);
-      closeAllPopups();
-    })
-    .catch(err => console.log(err))
+    return api.addCard(name, link)
+      .then(newCard => {
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
+      .catch(err => console.log(err))
   }
 
   return (

@@ -16,19 +16,21 @@ function AddCardPopup(props) {
   const handleNameChange = (evt) => setName(evt.target.value);
   const handleLinkChange = (evt) => setLink(evt.target.value);
 
-  const handleClose = () => {
+  const resetForm = () => {
     setName('');
     setLink('');
+  }
+
+  const handleClose = () => {
+    resetForm();
     onClose();
   }
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    onAddCard({
-      name,
-      link
-    });
+    onAddCard({ name,link })
+      .then(() => resetForm());
   }
 
   return (
