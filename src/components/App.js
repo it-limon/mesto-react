@@ -5,7 +5,7 @@ import Footer from './Footer';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
-import AddCardPopup from './AddCardPopup';
+import AddPlacePopup from './AddPlacePopup';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -105,7 +105,7 @@ function App() {
         onUpdateUser={handleUpdateUser}
       />
 
-      <AddCardPopup
+      <AddPlacePopup
         isOpen={isPopupCardOpen}
         onClose={closeAllPopups}
         onAddCard={handleAddCard}

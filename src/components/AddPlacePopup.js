@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import PopupWithForm from './PopupWithForm';
 import FormField from './FormField';
 
-function AddCardPopup(props) {
+function AddPlacePopup(props) {
   const {
     isOpen,
     onClose,
@@ -48,10 +48,10 @@ function AddCardPopup(props) {
   );
 }
 
-AddCardPopup.propTypes = {
+AddPlacePopup.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onAddCard: PropTypes.func.isRequired
 };
 
-export default AddCardPopup;
+export default AddPlacePopup;
