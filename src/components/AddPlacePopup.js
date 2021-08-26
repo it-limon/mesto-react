@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import PopupWithForm from './PopupWithForm';
 import FormField from './FormField';
@@ -16,27 +16,22 @@ function AddPlacePopup(props) {
   const handleNameChange = (evt) => setName(evt.target.value);
   const handleLinkChange = (evt) => setLink(evt.target.value);
 
-  const resetForm = () => {
-    setName('');
-    setLink('');
-  }
-
-  const handleClose = () => {
-    resetForm();
-    onClose();
-  }
+  useEffect(() => {
+    if (!isOpen) {
+      setName('');
+      setLink('');
+    }
+  }, [isOpen]);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-
-    onAddCard({ name,link })
-      .then(() => resetForm());
+    onAddCard({ name,link });
   }
 
   return (
     <PopupWithForm
       isOpen={isOpen}
-      onClose={handleClose}
+      onClose={onClose}
       onSubmit={handleSubmit}
       name='card'
       title='Новое место'

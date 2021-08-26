@@ -68,21 +68,21 @@ function App() {
   }
 
   const handleUpdateAvatar = (avatar) => {
-    return api.setUserAvatar(avatar)
+    api.setUserAvatar(avatar)
       .then(userInfo => {
         setCurrentUser(userInfo);
         closeAllPopups();
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   }
 
   const handleAddCard = ({name, link}) => {
-    return api.addCard(name, link)
+    api.addCard(name, link)
       .then(newCard => {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   }
 
   return (
