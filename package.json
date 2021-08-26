@@ -17,6 +17,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
+  "homepage": "https://it-limon.github.io/mesto-react/",
   "eslintConfig": {
     "extends": [
       "react-app",
